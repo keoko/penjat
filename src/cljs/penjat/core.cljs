@@ -14,6 +14,11 @@
 (defonce time-updater (js/setInterval
                         #(dispatch [:timer (js/Date.)]) 1000))
 
+(def img-dir "img")
+
+(def theme-name "julia")
+
+(def max-attempts 10)
 
 (def initial-state
   {:word "portatil"
@@ -55,9 +60,6 @@
     (assoc db :timer value)))    ;; return the new version of db
 
 
-
-
-
 (register-handler
   :key       
   (fn
@@ -66,7 +68,6 @@
         (if (not (blank? key))
           (let [letter (.charAt key 0)
                 db' (assoc db :key letter)]
-            (.log js/console  (str "log:" letter word db))
             (if  (contains-char? word letter)
               (update-in db' [:guessed-letters] #(conj % letter))
               (update-in db' [:failed-letters] #(conj % letter))))
@@ -178,7 +179,13 @@
   (let [a (subscribe [:attempts])]
     (fn attempts-render
       []
-      [:div @a])))
+      [:div
+       (doall 
+        (for [i (range 1 11)]
+          [:img {:width "500px"
+                 :height "500px"
+                 :src (str img-dir "/" theme-name "/" i ".png")
+                 :style {:display (if (== @a i) "inline-block" "none")}}]))])))
 
 
 (defn home-page
