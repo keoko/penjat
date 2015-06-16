@@ -14,9 +14,9 @@
 (defonce time-updater (js/setInterval
                         #(dispatch [:timer (js/Date.)]) 1000))
 
+
 (def initial-state
-  {:attempts 0
-   :word "portatil"
+  {:word "portatil"
    :key ""
    :guessed-letters #{}
    :failed-letters #{}})
@@ -55,6 +55,9 @@
     (assoc db :timer value)))    ;; return the new version of db
 
 
+
+
+
 (register-handler
   :key       
   (fn
@@ -70,13 +73,6 @@
           (assoc db :key "")))))
 
 
-(register-handler
-  :inc-attempts
-  (path [:attempts])
-  (fn
-    [attempts [_]]
-    (.log js/console (str "inc-attempts handler:"  attempts))
-    (inc attempts))) ;; return the new version of db
 
 ;; -- Subscription Handlers ---------------------------------------------------
 
@@ -113,7 +109,8 @@
  :attempts
  (fn
    [db _]
-   (reaction (:attempts @db))))
+   (let [failed-letters (reaction (:failed-letters @db))]
+     (reaction (count @failed-letters)))))
 
 
 (register-sub
