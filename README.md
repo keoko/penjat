@@ -3,9 +3,6 @@ Game in ClojureScript, using Reagent library and following re-frame principles.
 
 
 ## TODO
-- control game state
-- max failed attempts
-- enter max 1 letter
 - select word
 - timer
 - select theme
@@ -22,6 +19,12 @@ Game in ClojureScript, using Reagent library and following re-frame principles.
 
 
 ## DONE
+- enter max 1 letter
+- control game state
 - themes
 - guessed letters
 - key
+- max failed attempts
+
+## HACK
+- used component just to check if the game has finished (saved/hanged)

@@ -187,7 +187,7 @@
       [:div
        "key: "
        [:input {:type "text"
-                :value @key
+                :value ""
                 :on-change #(dispatch 
                              [:key (-> % .-target .-value)])}]])))
 
