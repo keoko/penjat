@@ -3,17 +3,18 @@ Game in ClojureScript, using Reagent library and following re-frame principles.
 
 
 ## TODO
-- control end game
+- control game state
 - max failed attempts
-- enter word
-- repeated letters
-- timer
 - enter max 1 letter
+- select word
+- timer
+- select theme
+
 
 
 ## NICE TO HAVE
+- repeated letters
 - accents
-
 - how to print db in figwheel
 - multiplayer
 - command history in figwheel
@@ -21,5 +22,6 @@ Game in ClojureScript, using Reagent library and following re-frame principles.
 
 
 ## DONE
+- themes
 - guessed letters
 - key

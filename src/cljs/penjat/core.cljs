@@ -1,18 +1,25 @@
 (ns penjat.core
   (:require-macros [reagent.ratom :refer [reaction]])  
   (:require [reagent.core :as reagent :refer [atom]]
+            [reagent.session :as session]
             [re-frame.core :refer [register-handler
                                    path
                                    register-sub
                                    dispatch
                                    dispatch-sync
                                    subscribe]]
+            [secretary.core :as secretary :include-macros true]
+            [goog.events :as events]
+            [goog.history.EventType :as EventType]
             [clojure.string :refer [join
-                                    blank?]]))
+                                    blank?]])
+  (:import goog.History))
 
 ;; trigger a dispatch every second
 (defonce time-updater (js/setInterval
                         #(dispatch [:timer (js/Date.)]) 1000))
+
+
 
 (def img-dir "img")
 
@@ -20,9 +27,12 @@
 
 (def max-attempts 10)
 
+(def game-states [:init :setup :run :pause :hang :win])
+
 (def initial-state
-  {:word "portatil"
+  {:word "funoll"
    :key ""
+   :state :init
    :guessed-letters #{}
    :failed-letters #{}})
 
@@ -40,7 +50,17 @@
   :initialize                     ;; usage:  (submit [:initialize])
   (fn 
     [db _]
+    (.log js/console "init...")
     (merge db initial-state)))    ;; what it returns becomes the new state
+
+(register-handler
+ :start-game
+ (fn
+   [db _]
+   (.log js/console "starting game...")
+   (dispatch [:initialize])
+   (secretary/dispatch! "/game")
+   (assoc db :state :run)))
 
 
 (register-handler
@@ -72,6 +92,8 @@
               (update-in db' [:guessed-letters] #(conj % letter))
               (update-in db' [:failed-letters] #(conj % letter))))
           (assoc db :key "")))))
+
+
 
 
 
@@ -119,6 +141,12 @@
  (fn
    [db _]
    (reaction (:guessed-letters @db))))
+
+(register-sub
+ :failed-letters
+ (fn
+   [db _]
+   (reaction (:failed-letters @db))))
 
 
 ;; -- View Components ---------------------------------------------------------
@@ -188,12 +216,120 @@
                  :style {:display (if (== @a i) "inline-block" "none")}}]))])))
 
 
+(defn game-win?
+  []
+  (let [guessed (subscribe [:guessed-letters])
+        word (subscribe [:word])]
+    (fn handle-win-game
+      []
+      (let [num-guessed (count @guessed)
+            max-to-guess (count (set @word))] 
+          (.log js/console "game-win?????")
+        (when (>= num-guessed max-to-guess)
+          (secretary/dispatch! "/saved"))
+        [:div ""]))))
+
+
+(defn game-over?
+  []
+  (let [failed (subscribe [:failed-letters])]
+    (fn handle-game-over
+      []
+      (let [num-failed (count @failed)]
+        (.log js/console "game-over?")
+        (when (>= num-failed max-attempts)
+          (secretary/dispatch! "/hanged"))
+        [:div ""]))))
+
+
+
+
+
 (defn home-page
   []
   [:div
    [word-input]
    [key-input]
-   [attempts]])
+   [attempts]
+   [game-win?]
+   [game-over?]])
+
+
+
+
+(defn page-template
+  [page]
+  [:div {:style {:background-image (str  "url(/img/" theme-name "/" page ".png)")
+                 :background-position "right bottom, left top;"
+                 :background-repeat "no-repeat, repeat"
+                 :padding "15px"
+                 :width "100%"
+                 :height "100%"
+                 :position "absolute"
+                 :left 0
+                 :top 0}}
+   [:button {:on-click #(dispatch [:start-game])} "play"]]
+)
+
+(defn start-page
+  []
+  (page-template "start"))
+
+(defn saved-page
+  []
+  (page-template "saved"))
+
+(defn hanged-page
+  []
+  (page-template "hanged"))
+
+
+(defn current-page []
+  [(session/get :current-page) (session/get :params)])
+
+
+;; -------------------------
+;; Routes
+(secretary/set-config! :prefix "#")
+
+(secretary/defroute "/" {:as params}
+  (session/put! :current-page #'start-page)
+  (session/put! :params params)
+  #_(dispatch [:load-start-page]))
+
+(secretary/defroute "/game" []
+  (session/put! :current-page #'home-page))
+
+(secretary/defroute "/saved" {:as params}
+  (session/put! :current-page #'saved-page)
+  (session/put! :params params)
+  #_(dispatch [:load-start-page]))
+
+(secretary/defroute "/hanged" {:as params}
+  (session/put! :current-page #'hanged-page)
+  (session/put! :params params)
+  #_(dispatch [:load-start-page]))
+
+
+(defn redirect-to
+  [resource]
+  (secretary/dispatch! resource)
+  (.setToken (History.) resource))
+
+(secretary/defroute "*" []
+  (redirect-to "/"))
+
+
+;; -------------------------
+;; History
+;; must be called after routes have been defined
+(defn hook-browser-navigation! []
+  (doto (History.)
+    (events/listen
+     EventType/NAVIGATE
+     (fn [event]
+       (secretary/dispatch! (.-token event))))
+    (.setEnabled true)))
 
 
 ;; -- Entry Point -------------------------------------------------------------
@@ -202,10 +338,12 @@
 (defn ^:export mount-root
   []
   (dispatch-sync [:initialize])
-  (reagent/render [home-page]
-                  (js/document.getElementById "app")))
+  #_(reagent/render [home-page]
+                  (js/document.getElementById "app"))
+  (reagent/render-component [current-page] (.getElementById js/document "app")))
 
 
 (defn init!
   []
+  (hook-browser-navigation!)
   (mount-root))
