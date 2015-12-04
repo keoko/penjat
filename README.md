@@ -4,9 +4,8 @@ Game in ClojureScript, using Reagent library and following re-frame principles.
 
 ## TODO
 - select word
-- timer
 - select theme
-
+- timer
 
 
 ## NICE TO HAVE
