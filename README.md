@@ -1,29 +1,47 @@
-# Penjat
-Game in ClojureScript, using Reagent library and following re-frame principles.
+# TodoMVC done with re-frame
+
+A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](http://todomvc.com/) game.
 
 
-## TODO
-- select word
-- select theme
-- timer
+## Setup And Run
+
+1. Install [Leiningen](http://leiningen.org/)  (plus Java).
+
+2. Get the re-frame repo
+   ```
+   git clone https://github.com/Day8/re-frame.git
+   ```
+
+3. Clean build
+   ```
+   lein do clean, figwheel
+   ```
+
+4. Run
+   You'll have to wait for step 4 to do its compile, but then:
+   ```
+   open http://localhost:3450
+   ```
 
 
-## NICE TO HAVE
-- repeated letters
-- accents
-- how to print db in figwheel
-- multiplayer
-- command history in figwheel
-- multiple dispatchs on the same event (chained reactions?)
+## Compile an optimized version
+
+1. Compile
+   ```
+   lein do clean, with-profile prod compile
+   ```
+
+2. Open the following in your browser
+   ```
+   resources/public/index.html
+   ```
 
 
-## DONE
-- enter max 1 letter
-- control game state
-- themes
-- guessed letters
-- key
-- max failed attempts
+## TODO
+- create component to set the word
+- layout with bootstrap
+- check schema
+- commit changes to github
+- deploy to heroku
 
-## HACK
-- used component just to check if the game has finished (saved/hanged)
+
