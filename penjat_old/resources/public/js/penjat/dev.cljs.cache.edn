@@ -1,2 +1,0 @@
-;; Analyzed by ClojureScript 1.7.170
-{:name penjat.dev, :doc nil, :excludes #{}, :use-macros nil, :require-macros nil, :uses nil, :requires {example penjat.core, penjat.core penjat.core, fw figwheel.client, figwheel.client figwheel.client}, :imports nil, :cljs.analyzer/constants {:seen #{:on-jsload :websocket-url}, :order [:on-jsload :websocket-url]}}
