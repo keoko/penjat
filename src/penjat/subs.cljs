@@ -28,6 +28,11 @@
       (reaction (vals (:todos @db)))))
 
 (register-sub
+ :word
+ (fn [db _]
+   (reaction (:word @db))))
+
+(register-sub
   :visible-todos
   (fn [db _]
       (reaction (let [filter-fn (filter-fn-for (:showing @db))

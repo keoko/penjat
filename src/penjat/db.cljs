@@ -23,6 +23,7 @@
 (def schema  {:todos (s/conditional
                        #(instance? PersistentTreeMap %)  ;; is a sorted-map (not just a map)
                        {TODO-ID TODO})                   ;; in this map, each todo is keyed by its :id
+              :word s/Str
 
               :showing  (s/enum            ;; what todos are shown to the user?
                           :all             ;; all todos are shown
@@ -41,7 +42,8 @@
 
 (def default-value            ;; what gets put into app-db by default.
   {:todos   (sorted-map)      ;; an empty list of todos. Use the (int) :id as the key
-   :showing :all})            ;; show all todos
+   :showing :all
+   :word    ""})            ;; show all todos
 
 
 

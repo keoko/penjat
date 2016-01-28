@@ -74,6 +74,12 @@
 
 
 (register-handler
+ :save-word
+ (fn [app-state [_ text]]
+   (assoc-in app-state [:word] text)))
+
+
+(register-handler
   :toggle-done
   todo-middleware
   (fn [todos [id]]

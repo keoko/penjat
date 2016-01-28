@@ -70,7 +70,7 @@
 
 (defn penjat-app
   []
-  (let [todos           (subscribe [:todos])
+  (let [word            (subscribe [:word])
         visible-todos   (subscribe [:visible-todos])
         completed-count (subscribe [:completed-count])]
     (fn []
@@ -80,4 +80,6 @@
          [:h1 "penjat"]
          [todo-input {:class "new-todo"
                       :placeholder "Escull la paraula"
-                      :on-save #(dispatch [:add-todo %])}]]]])))
+                      :on-save #(dispatch [:save-word %])}]]]
+       (when-not (empty? @word)
+         [:div (str "word:" @word)])])))
