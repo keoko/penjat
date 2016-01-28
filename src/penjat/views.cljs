@@ -68,7 +68,7 @@
    (for [todo  @visible-todos]
      ^{:key (:id todo)} [todo-item todo])])
 
-(defn todo-app
+(defn penjat-app
   []
   (let [todos           (subscribe [:todos])
         visible-todos   (subscribe [:visible-todos])
@@ -77,19 +77,7 @@
       [:div
        [:section.todoapp
         [:header#header
-         [:h1 "todos"]
+         [:h1 "penjat"]
          [todo-input {:class "new-todo"
-                      :placeholder "What needs to be done?"
-                      :on-save #(dispatch [:add-todo %])}]]
-        (when-not (empty? @todos)
-          [:div
-           [:section.main
-            [:input.toggle-all
-             {:type "checkbox"
-              :checked (pos? @completed-count)
-              :on-change #(dispatch [:complete-all-toggle])}]
-            [:label {:for "toggle-all"} "Mark all as complete"]
-            [todo-list visible-todos]]
-           [stats-footer]])]
-       [:footer.info
-        [:p "Double-click to edit a todo"]]])))
+                      :placeholder "Escull la paraula"
+                      :on-save #(dispatch [:add-todo %])}]]]])))

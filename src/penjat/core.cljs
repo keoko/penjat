@@ -30,5 +30,5 @@
 (defn ^:export main
   []
   (dispatch-sync [:initialise-db])
-  (reagent/render [penjat.views/todo-app]
+  (reagent/render [penjat.views/penjat-app]
                   (.getElementById js/document "app")))
