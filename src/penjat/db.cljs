@@ -2,6 +2,7 @@
   (:require [cljs.reader]
             [schema.core  :as s :include-macros true]))
 
+(s/set-fn-validation! false)
 
 ;; -- Schema -----------------------------------------------------------------
 ;;
@@ -23,7 +24,14 @@
 (def schema  {:todos (s/conditional
                        #(instance? PersistentTreeMap %)  ;; is a sorted-map (not just a map)
                        {TODO-ID TODO})                   ;; in this map, each todo is keyed by its :id
-              :word s/Str
+              :word s/Any
+              :key s/Any
+              (s/optional-key :guessed-letters) s/Any
+              (s/optional-key :failed-letters)  s/Any
+              :state (s/enum
+                     :start
+                     :play
+                     :end)
 
               :showing  (s/enum            ;; what todos are shown to the user?
                           :all             ;; all todos are shown
@@ -43,7 +51,11 @@
 (def default-value            ;; what gets put into app-db by default.
   {:todos   (sorted-map)      ;; an empty list of todos. Use the (int) :id as the key
    :showing :all
-   :word    ""})            ;; show all todos
+   :word    ""
+   :key ""
+   :state :start
+   :guessed-letters #{}
+   :failed-letters #{}}) ;; show all todos
 
 
 

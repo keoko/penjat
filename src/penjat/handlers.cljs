@@ -5,6 +5,14 @@
     [schema.core   :as s]))
 
 
+(def max-attempts 5)
+
+;; Helper functions
+
+(defn contains-char? [s c]
+  (some #(= c %) s))
+
+
 ;; -- Middleware --------------------------------------------------------------
 ;;
 ;; See https://github.com/Day8/re-frame/wiki/Using-Handler-Middleware
@@ -76,7 +84,33 @@
 (register-handler
  :save-word
  (fn [app-state [_ text]]
-   (assoc-in app-state [:word] text)))
+   (merge app-state {:word text
+                     :state :play})))
+
+
+(defn end-game?
+  [db]
+  (and  (= (:state db) :play)
+        (or (= (count (:word db)) (count (:guessed-letters db)))
+         (= max-attempts 
+            (inc (count (:failed-letters db)))))))
+
+
+(register-handler
+  :key       
+  (fn
+    [db [_ key]]
+    (let [word (:word db)]
+        (if (not (clojure.string/blank? key))
+          (let [letter (.charAt key 0)
+                db' (assoc db :key letter)]
+            (if  (contains-char? word letter)
+              (update-in db' [:guessed-letters] #(conj % letter))
+              (merge db' {:failed-letters (conj (:failed-letters db) letter)
+                          :state (if (end-game? db')
+                                   :end
+                                   (:state db))})))
+          (assoc db :key "")))))
 
 
 (register-handler
@@ -91,6 +125,10 @@
   todo-middleware
   (fn [todos [id title]]
     (assoc-in todos [id :title] title)))
+
+
+
+
 
 
 (register-handler

@@ -33,6 +33,42 @@
    (reaction (:word @db))))
 
 (register-sub
+ :guessed-letters
+ (fn
+   [db _]
+   (reaction (:guessed-letters @db))))
+
+(register-sub
+ :key
+ (fn
+   [db _]
+   (reaction (:key @db))))
+
+
+(register-sub
+ :attempts
+ (fn
+   [db _]
+   (let [failed-letters (reaction (:failed-letters @db))]
+     (reaction (count @failed-letters)))))
+
+
+(register-sub
+ :state
+ (fn
+   [db _]
+   (reaction (:state @db))))
+
+
+
+
+
+
+
+
+
+
+(register-sub
   :visible-todos
   (fn [db _]
       (reaction (let [filter-fn (filter-fn-for (:showing @db))

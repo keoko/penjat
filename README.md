@@ -38,9 +38,12 @@ A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](http:
 
 
 ## TODO
-- create component to set the word
+- fix end game? function
+- handle key stroke
 - layout with bootstrap
 - check schema
+- re-frame middleware
+- clean re-frame example code
 - commit changes to github
 - deploy to heroku
 

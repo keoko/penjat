@@ -68,16 +68,62 @@
    (for [todo  @visible-todos]
      ^{:key (:id todo)} [todo-item todo])])
 
+
+(defn word-input
+  []
+  (let [w (subscribe [:word])
+        guessed (subscribe [:guessed-letters])]
+    (fn word-input-render
+      []
+      (let [letters (clojure.string/join " " (map #(if (contains? @guessed %) % "_") @w))]
+        [:div
+         (str "word: " letters)]))))
+
+(defn key-input
+  []
+  (let [key (subscribe [:key])]
+    (fn key-input-handler
+      []
+      [:div
+       "key: "
+       [:input {:type "text"
+                :value @key
+                :on-change #(dispatch 
+                             [:key (-> % .-target .-value)])}]])))
+
+(defn attempts
+  []
+  (let [attempts (subscribe [:attempts])]
+    (fn attempts-render
+      []
+      [:div (str "attempts:" @attempts)])))
+
+(defn replay
+  []
+  (fn replay-button
+    []
+    [:button {:on-click #(dispatch [:initialise-db])} "replay"]))
+
+
 (defn penjat-app
   []
-  (let [word            (subscribe [:word])]
+  (let [word            (subscribe [:word])
+        guessed         (subscribe [:guessed-letters])
+        state           (subscribe [:state])]
     (fn []
       [:div
        [:section.todoapp
         [:header#header
          [:h1 "penjat"]
-         (if (empty? @word)
+         (case @state
+           :play [:div 
+                  [key-input]
+                  [word-input]
+                  [attempts]
+                  ]
+           :end [:div 
+                 [attempts]
+                 [replay]]
            [todo-input {:class "new-todo"
                         :placeholder "Escull la paraula"
-                        :on-save #(dispatch [:save-word %])}]
-           [:div (str "word:" @word)])]]])))
+                        :on-save #(dispatch [:save-word %])}])]]])))
