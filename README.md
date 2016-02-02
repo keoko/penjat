@@ -1,6 +1,6 @@
-# TodoMVC done with re-frame
+# Penjat game done with re-frame
 
-A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](http://todomvc.com/) game.
+A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](https://en.wikipedia.org/wiki/Hangman_(game)).
 
 
 ## Setup And Run
@@ -40,11 +40,13 @@ A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](http:
 ## TODO
 - handle key stroke
 - layout with bootstrap
-- chain reaction
 - check schema
 - re-frame middleware
 - clean re-frame example code
-- commit changes to github
+- refactor code with domain language
+- local storage
+- do we split the game logic into a game file?
+- chained state reaction? one state property depending on another one? is this state?
 - deploy to heroku
 
 
