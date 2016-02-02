@@ -2,6 +2,9 @@
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [re-frame.core :refer [register-sub]]))
 
+(def max-attempts 3)
+
+
 
 ;; -- Helpers -----------------------------------------------------------------
 
@@ -53,11 +56,33 @@
      (reaction (count @failed-letters)))))
 
 
+(defn win-game?
+  [word guessed-letters]
+  (= (set word) (set guessed-letters)))
+
+(defn lose-game?
+  [failed-letters]
+  (<= max-attempts (count failed-letters)))
+
+(defn end-game?
+  [word guessed-letters failed-letters]
+  (or (win-game? word guessed-letters)
+      (lose-game? failed-letters)))
+
+
 (register-sub
  :state
  (fn
    [db _]
-   (reaction (:state @db))))
+   (let [word (reaction (:word @db))
+         failed-letters (reaction (:failed-letters @db))
+         guessed-letters (reaction (:guessed-letters @db))]
+     (reaction 
+      (if (not (seq @word))
+        :start
+        (if (end-game? @word @guessed-letters @failed-letters)
+          :end 
+          :play))))))
 
 
 

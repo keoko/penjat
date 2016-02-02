@@ -38,13 +38,17 @@ A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](http:
 
 
 ## TODO
-- fix end game? function
 - handle key stroke
 - layout with bootstrap
+- chain reaction
 - check schema
 - re-frame middleware
 - clean re-frame example code
 - commit changes to github
 - deploy to heroku
 
+
+## NICE TO HAVE
+- warning message on repeated letter
+- control allowed letters
 

@@ -5,8 +5,6 @@
     [schema.core   :as s]))
 
 
-(def max-attempts 5)
-
 ;; Helper functions
 
 (defn contains-char? [s c]
@@ -88,7 +86,7 @@
                      :state :play})))
 
 
-(defn end-game?
+#_(defn end-game?
   [db]
   (and  (= (:state db) :play)
         (or (= (count (:word db)) (count (:guessed-letters db)))
@@ -101,16 +99,17 @@
   (fn
     [db [_ key]]
     (let [word (:word db)]
-        (if (not (clojure.string/blank? key))
-          (let [letter (.charAt key 0)
-                db' (assoc db :key letter)]
-            (if  (contains-char? word letter)
-              (update-in db' [:guessed-letters] #(conj % letter))
-              (merge db' {:failed-letters (conj (:failed-letters db) letter)
-                          :state (if (end-game? db')
-                                   :end
-                                   (:state db))})))
-          (assoc db :key "")))))
+      (if (not (clojure.string/blank? key))
+        (let [letter (.charAt key 0)
+              guessed? (contains-char? word letter)]
+          (merge db {:key letter}
+                 (if guessed? 
+                   {:guessed-letters (conj (:guessed-letters db) letter)
+                    :key ""}
+                   {:failed-letters (conj (:failed-letters db) letter)
+                    :attempts (inc (:attempts db))
+                    :key ""})))
+        (assoc db :key "")))))
 
 
 (register-handler

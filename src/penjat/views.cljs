@@ -1,6 +1,7 @@
 (ns penjat.views
   (:require [reagent.core  :as reagent :refer [atom]]
-            [re-frame.core :refer [subscribe dispatch]]))
+            [re-frame.core :refer [subscribe dispatch]]
+            [penjat.subs :refer [win-game?]]))
 
 
 (defn todo-input [{:keys [title on-save on-stop]}]
@@ -105,6 +106,17 @@
     [:button {:on-click #(dispatch [:initialise-db])} "replay"]))
 
 
+(defn end-page
+  [word guessed-letters failed-letters]
+  (fn end-page-render
+    []
+    [:div 
+     [:div (if (win-game? word guessed-letters)
+             "YOU WIN!!!!"
+             "YOU LOSE :P")]
+     [replay]]))
+
+
 (defn penjat-app
   []
   (let [word            (subscribe [:word])
@@ -119,11 +131,8 @@
            :play [:div 
                   [key-input]
                   [word-input]
-                  [attempts]
-                  ]
-           :end [:div 
-                 [attempts]
-                 [replay]]
+                  [attempts]]
+           :end [end-page @word @guessed]
            [todo-input {:class "new-todo"
                         :placeholder "Escull la paraula"
                         :on-save #(dispatch [:save-word %])}])]]])))
