@@ -1,6 +1,6 @@
 (ns penjat.handlers
   (:require
-    [penjat.db    :refer [default-value ls->todos todos->ls! schema]]
+    [penjat.db    :refer [default-value schema]]
     [re-frame.core :refer [register-handler path trim-v after]]
     [schema.core   :as s]))
 
@@ -27,12 +27,9 @@
 (def check-schema-mw (after (partial check-and-throw schema)))
 
 
-(def ->ls (after todos->ls!))    ;; middleware to store todos into local storage
-
 ;; middleware for any handler that manipulates todos
 (def todo-middleware [check-schema-mw ;; ensure the schema is still valid
                       (path :todos)   ;; 1st param to handler will be value from this path
-                      ->ls            ;; write to localstore each time
                       trim-v])        ;; remove event id from event vec
 
 
@@ -53,7 +50,7 @@
   :initialise-db                  ;; event id being handled
   check-schema-mw                 ;; afterwards: check that app-db matches the schema
   (fn [_ _]                       ;; the handler being registered
-    (merge default-value (ls->todos))))  ;; all hail the new state
+    default-value))  ;; all hail the new state
 
 
                                   ;; usage:  (dispatch [:set-showing  :active])
