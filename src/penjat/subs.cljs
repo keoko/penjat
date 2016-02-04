@@ -22,13 +22,6 @@
    [db _]
    (reaction (:misses @db))))
 
-(register-sub
- :key
- (fn
-   [db _]
-   (reaction (:key @db))))
-
-
 (defn win-game?
   [word guesses]
   (= (set word) (set guesses)))

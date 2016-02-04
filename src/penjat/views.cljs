@@ -25,13 +25,13 @@
 
 (defn key-input
   []
-  (let [key (subscribe [:key])]
+  (let [val (atom "")]
     (fn key-input-handler
       []
       [:div
        "key: "
        [:input {:type "text"
-                :value @key
+                :value @val
                 :on-change #(dispatch 
                              [:key (-> % .-target .-value)])}]])))
 

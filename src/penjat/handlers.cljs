@@ -40,11 +40,10 @@
   (fn
     [db [_ key]]
     (let [word (:word db)]
-      (if (not (clojure.string/blank? key))
+      (when (not (clojure.string/blank? key))
         (let [letter (.charAt key 0)
               guesses? (contains-char? word letter)]
-          (merge db {:key ""}
+          (merge db
                  (if guesses? 
                    {:guesses (into #{} (conj (:guesses db) letter))}
-                   {:misses (conj (:misses db) letter)})))
-        (assoc db :key "")))))
+                   {:misses (conj (:misses db) letter)})))))))
