@@ -16,7 +16,6 @@
 
 (def check-schema-mw (after (partial check-and-throw schema)))
 
-
 (def app-middleware [check-schema-mw])
 
 
@@ -31,9 +30,8 @@
 (register-handler
  :save-word
  app-middleware
- (fn [app-state [_ text]]
-   (merge app-state {:word text
-                     :state :play})))
+ (fn [db [_ text]]
+   (assoc db :word text)))
 
 
 (register-handler
