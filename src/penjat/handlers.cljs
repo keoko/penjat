@@ -1,12 +1,10 @@
 (ns penjat.handlers
   (:require
-    [penjat.db    :refer [default-value schema]]
+    [penjat.db    :refer [schema]]
+    [penjat.game  :refer [default-game-state set-word guess-letter]]
     [re-frame.core :refer [register-handler path trim-v after]]
     [schema.core   :as s]))
 
-
-(defn contains-char? [s c]
-  (some #(= c %) s))
 
 (defn check-and-throw
   "throw an exception if db doesn't match the schema."
@@ -19,31 +17,25 @@
 (def app-middleware [check-schema-mw])
 
 
-
 (register-handler
   :initialise-db
   check-schema-mw
   (fn [_ _]
-    default-value))
+    default-game-state))
 
 
 (register-handler
  :save-word
  app-middleware
  (fn [db [_ text]]
-   (assoc db :word text)))
+   (set-word db text)))
 
 
 (register-handler
-  :key       
-  app-middleware
-  (fn
-    [db [_ key]]
-    (let [word (:word db)]
-      (when (not (clojure.string/blank? key))
-        (let [letter (.charAt key 0)
-              guesses? (contains-char? word letter)]
-          (merge db
-                 (if guesses? 
-                   {:guesses (into #{} (conj (:guesses db) letter))}
-                   {:misses (conj (:misses db) letter)})))))))
+ :key       
+ app-middleware
+ (fn
+   [db [_ key]]
+   (let [letter (.charAt key 0)]
+     (when (not (clojure.string/blank? key))
+       (guess-letter db key)))))

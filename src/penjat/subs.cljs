@@ -1,8 +1,7 @@
 (ns penjat.subs
   (:require-macros [reagent.ratom :refer [reaction]])
-  (:require [re-frame.core :refer [register-sub]]))
-
-(def max-attempts 5)
+  (:require [re-frame.core :refer [register-sub]]
+            [penjat.game :refer [end-game?]]))
 
 
 (register-sub
@@ -21,19 +20,6 @@
  (fn
    [db _]
    (reaction (:misses @db))))
-
-(defn win-game?
-  [word guesses]
-  (= (set word) (set guesses)))
-
-(defn lose-game?
-  [misses]
-  (<= max-attempts (count misses)))
-
-(defn end-game?
-  [word guesses misses]
-  (or (win-game? word guesses)
-      (lose-game? misses)))
 
 (register-sub
  :current-page

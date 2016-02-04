@@ -6,9 +6,3 @@
 (def schema  {:word s/Any
               (s/optional-key :guesses) s/Any
               (s/optional-key :misses)  s/Any})
-
-(def default-value
-  {
-   :word ""
-   :guesses #{}
-   :misses #{}})

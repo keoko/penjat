@@ -1,7 +1,7 @@
 (ns penjat.views
   (:require [reagent.core  :as reagent :refer [atom]]
             [re-frame.core :refer [subscribe dispatch]]
-            [penjat.subs :refer [win-game?]]))
+            [penjat.game :refer [win-game?]]))
 
 
 (defn choose-word-input [{:keys [title on-save on-stop]}]
