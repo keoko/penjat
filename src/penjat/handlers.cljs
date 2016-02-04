@@ -89,7 +89,7 @@
 #_(defn end-game?
   [db]
   (and  (= (:state db) :play)
-        (or (= (count (:word db)) (count (:guessed-letters db)))
+        (or (= (count (:word db)) (count (:guesses db)))
          (= max-attempts 
             (inc (count (:misses db)))))))
 
@@ -101,13 +101,11 @@
     (let [word (:word db)]
       (if (not (clojure.string/blank? key))
         (let [letter (.charAt key 0)
-              guessed? (contains-char? word letter)]
-          (merge db {:key letter}
-                 (if guessed? 
-                   {:guessed-letters (conj (:guessed-letters db) letter)
-                    :key ""}
-                   {:misses (conj (:misses db) letter)
-                    :key ""})))
+              guesses? (contains-char? word letter)]
+          (merge db {:key ""}
+                 (if guesses? 
+                   {:guesses (into #{} (conj (:guesses db) letter))}
+                   {:misses (conj (:misses db) letter)})))
         (assoc db :key "")))))
 
 

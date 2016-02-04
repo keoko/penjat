@@ -36,10 +36,10 @@
    (reaction (:word @db))))
 
 (register-sub
- :guessed-letters
+ :guesses
  (fn
    [db _]
-   (reaction (:guessed-letters @db))))
+   (reaction (:guesses @db))))
 
 (register-sub
  :misses
@@ -64,15 +64,15 @@
 
 
 (defn win-game?
-  [word guessed-letters]
-  (= (set word) (set guessed-letters)))
+  [word guesses]
+  (= (set word) (set guesses)))
 (defn lose-game?
   [misses]
   (<= max-attempts (count misses)))
 
 (defn end-game?
-  [word guessed-letters misses]
-  (or (win-game? word guessed-letters)
+  [word guesses misses]
+  (or (win-game? word guesses)
       (lose-game? misses)))
 
 
@@ -82,11 +82,11 @@
    [db _]
    (let [word (reaction (:word @db))
          misses (reaction (:misses @db))
-         guessed-letters (reaction (:guessed-letters @db))]
+         guesses (reaction (:guesses @db))]
      (reaction 
       (if (not (seq @word))
         :start
-        (if (end-game? @word @guessed-letters @misses)
+        (if (end-game? @word @guesses @misses)
           :end 
           :play))))))
 

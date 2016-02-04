@@ -26,7 +26,7 @@
                        {TODO-ID TODO})                   ;; in this map, each todo is keyed by its :id
               :word s/Any
               :key s/Any
-              (s/optional-key :guessed-letters) s/Any
+              (s/optional-key :guesses) s/Any
               (s/optional-key :misses)  s/Any
               :state (s/enum
                      :start
@@ -54,7 +54,7 @@
    :word    ""
    :key ""
    :state :start
-   :guessed-letters #{}
+   :guesses #{}
    :misses #{}}) ;; show all todos
 
 

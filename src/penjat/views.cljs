@@ -72,13 +72,15 @@
 
 (defn word-input
   []
-  (let [w (subscribe [:word])
-        guessed (subscribe [:guessed-letters])]
+  (let [word (subscribe [:word])
+        guesses (subscribe [:guesses])]
     (fn word-input-render
       []
-      (let [letters (clojure.string/join " " (map #(if (contains? @guessed %) % "_") @w))]
+      (let [letters (clojure.string/join " " 
+                                         (map #(if (contains? @guesses %) % "_") @word))]
+        (.log js/console (str "words:" @guesses letters @word))
         [:div
-         (str "word: " letters)]))))
+         (str "guesses: " letters)]))))
 
 (defn key-input
   []
@@ -111,11 +113,11 @@
 
 
 (defn end-page
-  [word guessed-letters misses]
+  [word guesses misses]
   (fn end-page-render
     []
     [:div 
-     [:div (if (win-game? word guessed-letters)
+     [:div (if (win-game? word guesses)
              "YOU WIN!!!!"
              [:div "Guesser loses - the answer was " [:b word]])]
      [replay]]))
@@ -124,7 +126,7 @@
 (defn penjat-app
   []
   (let [word            (subscribe [:word])
-        guessed         (subscribe [:guessed-letters])
+        guesses         (subscribe [:guesses])
         state           (subscribe [:state])
         misses          (subscribe [:misses])]
     (fn []
@@ -137,7 +139,7 @@
                   [key-input]
                   [word-input]
                   [miss-letters-component @misses]]
-           :end [end-page @word @guessed]
+           :end [end-page @word @guesses]
            [todo-input {:class "new-todo"
                         :placeholder "Escull la paraula"
                         :on-save #(dispatch [:save-word %])}])]]])))
