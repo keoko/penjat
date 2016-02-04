@@ -27,7 +27,7 @@
               :word s/Any
               :key s/Any
               (s/optional-key :guessed-letters) s/Any
-              (s/optional-key :failed-letters)  s/Any
+              (s/optional-key :misses)  s/Any
               :state (s/enum
                      :start
                      :play
@@ -55,7 +55,7 @@
    :key ""
    :state :start
    :guessed-letters #{}
-   :failed-letters #{}}) ;; show all todos
+   :misses #{}}) ;; show all todos
 
 
 

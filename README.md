@@ -1,6 +1,6 @@
 # Penjat game done with re-frame
 
-A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](https://en.wikipedia.org/wiki/Hangman_(game)).
+A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](https://en.wikipedia.org/wiki/Hangman_(game)). In catalan, it's called "penjat".
 
 
 ## Setup And Run
@@ -38,12 +38,12 @@ A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](https
 
 
 ## TODO
+- clean re-frame example code
+- refactor code with domain language
 - handle key stroke
 - layout with bootstrap
 - check schema
 - re-frame middleware
-- clean re-frame example code
-- refactor code with domain language
 - local storage
 - do we split the game logic into a game file?
 - chained state reaction? one state property depending on another one? is this state?
@@ -53,4 +53,3 @@ A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](https
 ## NICE TO HAVE
 - warning message on repeated letter
 - control allowed letters
-

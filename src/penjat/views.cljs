@@ -93,11 +93,15 @@
                              [:key (-> % .-target .-value)])}]])))
 
 (defn attempts
-  []
+  [misses]
   (let [attempts (subscribe [:attempts])]
     (fn attempts-render
       []
       [:div (str "attempts:" @attempts)])))
+
+(defn miss-letters-component
+  [misses]
+  [:div (str "misses:" (apply str (interpose ","  misses)))])
 
 (defn replay
   []
@@ -107,13 +111,13 @@
 
 
 (defn end-page
-  [word guessed-letters failed-letters]
+  [word guessed-letters misses]
   (fn end-page-render
     []
     [:div 
      [:div (if (win-game? word guessed-letters)
              "YOU WIN!!!!"
-             "YOU LOSE :P")]
+             [:div "Guesser loses - the answer was " [:b word]])]
      [replay]]))
 
 
@@ -121,7 +125,8 @@
   []
   (let [word            (subscribe [:word])
         guessed         (subscribe [:guessed-letters])
-        state           (subscribe [:state])]
+        state           (subscribe [:state])
+        misses          (subscribe [:misses])]
     (fn []
       [:div
        [:section.todoapp
@@ -131,7 +136,7 @@
            :play [:div 
                   [key-input]
                   [word-input]
-                  [attempts]]
+                  [miss-letters-component @misses]]
            :end [end-page @word @guessed]
            [todo-input {:class "new-todo"
                         :placeholder "Escull la paraula"

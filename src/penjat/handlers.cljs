@@ -91,7 +91,7 @@
   (and  (= (:state db) :play)
         (or (= (count (:word db)) (count (:guessed-letters db)))
          (= max-attempts 
-            (inc (count (:failed-letters db)))))))
+            (inc (count (:misses db)))))))
 
 
 (register-handler
@@ -106,8 +106,7 @@
                  (if guessed? 
                    {:guessed-letters (conj (:guessed-letters db) letter)
                     :key ""}
-                   {:failed-letters (conj (:failed-letters db) letter)
-                    :attempts (inc (:attempts db))
+                   {:misses (conj (:misses db) letter)
                     :key ""})))
         (assoc db :key "")))))
 
