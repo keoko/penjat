@@ -3,7 +3,8 @@
             [re-frame.core :refer [dispatch dispatch-sync]]
             [penjat.handlers]
             [penjat.subs]
-            [penjat.views]))
+            [penjat.views]
+            [penjat.game]))
 
 
 (enable-console-print!)
