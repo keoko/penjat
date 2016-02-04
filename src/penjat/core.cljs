@@ -13,19 +13,6 @@
 
 (enable-console-print!)
 
-;; -- Routes and History ------------------------------------------------------
-
-(defroute "/" [] (dispatch [:set-showing :all]))
-(defroute "/:filter" [filter] (dispatch [:set-showing (keyword filter)]))
-
-(def history
-  (doto (History.)
-    (events/listen EventType.NAVIGATE
-                   (fn [event] (secretary/dispatch! (.-token event))))
-    (.setEnabled true)))
-
-
-;; -- Entry Point -------------------------------------------------------------
 
 (defn ^:export main
   []
