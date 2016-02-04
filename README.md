@@ -44,6 +44,7 @@ A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](https
 - layout with bootstrap
 - check schema
 - re-frame middleware
+- with-meta, component-did-mount, reagent/dom-node
 - local storage
 - do we split the game logic into a game file?
 - chained state reaction? one state property depending on another one? is this state?

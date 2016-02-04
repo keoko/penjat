@@ -77,7 +77,7 @@
 
 
 (register-sub
- :state
+ :current-page
  (fn
    [db _]
    (let [word (reaction (:word @db))
