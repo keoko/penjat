@@ -1,14 +1,9 @@
 (ns penjat.core
-  (:require-macros [secretary.core :refer [defroute]])
-  (:require [goog.events :as events]
-            [reagent.core :as reagent :refer [atom]]
+  (:require [reagent.core :as reagent :refer [atom]]
             [re-frame.core :refer [dispatch dispatch-sync]]
-            [secretary.core :as secretary]
             [penjat.handlers]
             [penjat.subs]
-            [penjat.views])
-  (:import [goog History]
-           [goog.history EventType]))
+            [penjat.views]))
 
 
 (enable-console-print!)
