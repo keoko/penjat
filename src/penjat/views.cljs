@@ -50,13 +50,12 @@
       []
       (let [letters (clojure.string/join " " 
                                          (map #(if (contains? @guesses %) % "_") @word))]
-        [:div
-         (str "guesses: " letters)]))))
+        [:div.new-todo letters]))))
 
 
 (defn missed-letters
   [misses]
-  [:div (str "misses:" (apply str (interpose ","  misses)))])
+  [:div.new-todo (apply str (interpose ","  misses))])
 
 
 (defn gallow
@@ -96,8 +95,8 @@
     (fn play-page-render
       []
       [:div 
-       [key-input]
        [guessed-letters]
+       [key-input]
        [gallow]
        [missed-letters @misses]])))
 
