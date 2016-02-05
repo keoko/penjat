@@ -66,7 +66,7 @@
     []
     [choose-word-input {:class "new-todo"
                         :placeholder "Escull la paraula"
-                        :on-save #(dispatch [:save-word %])}]))
+                        :on-save #(dispatch [:set-word %])}]))
 
 (defn play-page
   []

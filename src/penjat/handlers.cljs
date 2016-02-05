@@ -25,7 +25,7 @@
 
 
 (register-handler
- :save-word
+ :set-word
  app-middleware
  (fn [db [_ text]]
    (set-word db text)))

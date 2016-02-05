@@ -36,4 +36,3 @@
   [word guesses misses]
   (or (win-game? word guesses)
       (lose-game? misses)))
-
