@@ -1,7 +1,7 @@
 (ns penjat.game)
 
 
-(def max-attempts 5)
+(def max-misses 11)
 
 (def default-game-state
   {
@@ -30,7 +30,7 @@
 
 (defn lose-game?
   [misses]
-  (<= max-attempts (count misses)))
+  (<= max-misses (count misses)))
 
 (defn end-game?
   [word guesses misses]

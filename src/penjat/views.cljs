@@ -4,6 +4,12 @@
             [penjat.game :refer [win-game?]]))
 
 
+
+(def img-dir "img")
+
+(def theme-name "julia")
+
+
 (defn choose-word-input [{:keys [title on-save on-stop]}]
   (let [val (atom title)
         stop #(do (reset! val "")
@@ -53,6 +59,22 @@
   [:div (str "misses:" (apply str (interpose ","  misses)))])
 
 
+(defn gallow
+  []
+  (let [a (subscribe [:num-misses])]
+    (fn gallow-render
+      []
+      [:div
+       (doall 
+        (for [i (range 1 11)]
+          [:img {:width "500px"
+                 :height "500px"
+                 :src (str img-dir "/" theme-name "/" i ".png")
+                 :style {:display (if (== @a i) "inline-block" "none")}}]))])))
+
+
+
+
 (defn replay
   []
   (fn replay-button
@@ -76,6 +98,7 @@
       [:div 
        [key-input]
        [guessed-letters]
+       [gallow]
        [missed-letters @misses]])))
 
 

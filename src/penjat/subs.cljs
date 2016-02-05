@@ -21,6 +21,14 @@
    [db _]
    (reaction (:misses @db))))
 
+
+(register-sub
+ :num-misses
+ (fn
+   [db _]
+   (reaction (count (:misses @db)))))
+
+
 (register-sub
  :current-page
  (fn
