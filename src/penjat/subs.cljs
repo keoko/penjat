@@ -1,7 +1,7 @@
 (ns penjat.subs
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [re-frame.core :refer [register-sub]]
-            [penjat.game :refer [end-game?]]))
+            [penjat.game :refer [get-current-page]]))
 
 
 (register-sub
@@ -36,9 +36,4 @@
    (let [word (reaction (:word @db))
          misses (reaction (:misses @db))
          guesses (reaction (:guesses @db))]
-     (reaction 
-      (if (not (seq @word))
-        :start
-        (if (end-game? @word @guesses @misses)
-          :end 
-          :play))))))
+     (reaction (get-current-page @db)))))

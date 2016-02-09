@@ -1,8 +1,8 @@
 (ns penjat.handlers
   (:require
     [penjat.db    :refer [schema]]
-    [penjat.game  :refer [default-game-state set-word guess-letter]]
-    [re-frame.core :refer [register-handler path trim-v after]]
+    [penjat.game  :refer [default-game-state set-word guess-letter get-current-page]]
+    [re-frame.core :refer [register-handler path trim-v after dispatch]]
     [schema.core   :as s]))
 
 
@@ -17,10 +17,40 @@
 (def app-middleware [check-schema-mw])
 
 
+(defn keydown
+  [e]
+  (dispatch [:keypressed e]))
+
+(defn keydown-in-start-page
+  [key])
+
+(defn keydown-in-play-page
+  [key]
+  (dispatch [:key key]))
+
+(defn keydown-in-end-page
+  [key]
+  (dispatch [:initialise-db]))
+
+
+(def keydown-event-by-page {:start keydown-in-start-page
+                            :play keydown-in-play-page
+                            :end keydown-in-end-page})
+
+(register-handler
+ :keypressed
+ (fn [db [_ e page]]
+   (let [key (js/String.fromCharCode (.-keyCode e))
+         current-page (get-current-page db)]
+     ((get keydown-event-by-page current-page) key)
+     db)))
+
+
 (register-handler
   :initialise-db
   check-schema-mw
   (fn [_ _]
+    (set! (.-onkeydown js/document) keydown)
     default-game-state))
 
 

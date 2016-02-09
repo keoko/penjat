@@ -29,19 +29,6 @@
                                      nil)})])))
 
 
-(defn key-input
-  []
-  (let [val (atom "")]
-    (fn key-input-handler
-      []
-      [:div
-       "key: "
-       [:input {:type "text"
-                :value @val
-                :on-change #(dispatch 
-                             [:key (-> % .-target .-value)])}]])))
-
-
 (defn guessed-letters
   []
   (let [word (subscribe [:word])
@@ -85,18 +72,19 @@
   []
   (fn start-page-render
     []
-    [choose-word-input {:class "new-todo"
-                        :placeholder "Escull la paraula"
-                        :on-save #(dispatch [:set-word %])}]))
+    (dispatch [:init-event-handlers-by-page :start])
+    [:div [choose-word-input {:class "new-todo"
+                              :placeholder ""
+                              :on-save #(dispatch [:set-word %])}]]))
 
 (defn play-page
   []
   (let [misses (subscribe [:misses])]
     (fn play-page-render
       []
+      (dispatch [:init-event-handlers-by-page :play])
       [:div 
        [guessed-letters]
-       [key-input]
        [gallow]
        [missed-letters @misses]])))
 
@@ -107,11 +95,33 @@
         guesses (subscribe [:guesses])]
       (fn end-page-render
         []
+        (dispatch [:init-event-handlers-by-page :end])
         [:div 
          [:div (if (win-game? @word @guesses)
                  "HAS GUANYAT :D !!!!"
                  [:div "Has perdut :'(  --> La paraula era " [:b @word]])]
          [replay]])))
+
+(defn start-footer
+  []
+  [:p "Escull una paraula"])
+
+(defn play-footer
+  []
+  [:p "Adivina la paraula"])
+
+(defn end-footer
+  []
+  [:p "Prem qualsevol tecla per tornar a jugar."])
+
+
+(def body-by-page {:start start-page
+                   :end end-page
+                   :play play-page})
+
+(def footer-by-page {:start start-footer
+                     :end end-footer
+                     :play play-footer})
 
 
 (defn penjat-app
@@ -121,8 +131,7 @@
       [:div
        [:section.todoapp
         [:header#header
-         [:h1 "penjat"]
-         (case @current-page
-           :play [play-page]
-           :end [end-page]
-           [start-page])]]])))
+         [:h1 "penjat"]]
+        [(get body-by-page @current-page)]]
+       [:footer.info
+        [(get footer-by-page @current-page)]]])))
