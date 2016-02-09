@@ -20,6 +20,7 @@
     (fn [props]
       [:input (merge props
                      {:type "text"
+                      :style {:text-transform "uppercase"}
                       :value @val
                       :on-blur save
                       :on-change #(reset! val (-> % .-target .-value))

@@ -42,6 +42,7 @@
  (fn [db [_ e page]]
    (let [key (js/String.fromCharCode (.-keyCode e))
          current-page (get-current-page db)]
+     (.log js/console (str "current-page:" current-page db))
      ((get keydown-event-by-page current-page) key)
      db)))
 

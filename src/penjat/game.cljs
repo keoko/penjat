@@ -10,17 +10,9 @@
    :misses #{}})
 
 
-(defn get-current-page
-  [{:keys [word guesses misses]}]
-  (if (not (seq word))
-    :start
-    (if (end-game? word guesses misses)
-      :end 
-      :play)))
-
 (defn set-word
   [db text]
-  (assoc db :word text))
+  (assoc db :word (clojure.string/upper-case text)))
 
 (defn contains-char? [s c]
   (some #(= c %) s))
@@ -45,4 +37,12 @@
   [word guesses misses]
   (or (win-game? word guesses)
       (lose-game? misses)))
+
+(defn get-current-page
+  [{:keys [word guesses misses]}]
+  (if (not (seq word))
+    :start
+    (if (end-game? word guesses misses)
+      :end 
+      :play)))
 
