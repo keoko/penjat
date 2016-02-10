@@ -43,7 +43,7 @@
 
 (defn missed-letters
   [misses]
-  [:div.new-todo (apply str (interpose ","  misses))])
+  [:div (apply str (interpose ","  misses))])
 
 
 (defn gallow
@@ -74,9 +74,9 @@
   (fn start-page-render
     []
     (dispatch [:init-event-handlers-by-page :start])
-    [:div [choose-word-input {:class "new-todo"
-                              :placeholder ""
-                              :on-save #(dispatch [:set-word %])}]]))
+    [choose-word-input {:class "new-todo"
+                        :placeholder ""
+                        :on-save #(dispatch [:set-word %])}]))
 
 (defn play-page
   []
