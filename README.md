@@ -38,12 +38,11 @@ A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](https
 
 
 ## TODO
+- move on focus
 - images
-- center letters
-- increase footer letters
 - display properly the gallow
+- greyed init gallow
 - page control is not game logic
-- refactor page-based functions
 - deploy to heroku
 - check schema
 - re-frame middleware
@@ -58,3 +57,4 @@ A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](https
 ## NICE TO HAVE
 - warning message on repeated letter
 - control allowed letters
+- replace todos.css with bootstrap
