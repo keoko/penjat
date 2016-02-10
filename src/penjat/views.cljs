@@ -73,7 +73,6 @@
   []
   (fn start-page-render
     []
-    (dispatch [:init-event-handlers-by-page :start])
     [choose-word-input {:class "new-todo"
                         :placeholder ""
                         :on-save #(dispatch [:set-word %])}]))
@@ -83,7 +82,6 @@
   (let [misses (subscribe [:misses])]
     (fn play-page-render
       []
-      (dispatch [:init-event-handlers-by-page :play])
       [:div 
        [guessed-letters]
        [gallow]
@@ -96,7 +94,6 @@
         guesses (subscribe [:guesses])]
       (fn end-page-render
         []
-        (dispatch [:init-event-handlers-by-page :end])
         [:div 
          [:div (if (win-game? @word @guesses)
                  "HAS GUANYAT :D !!!!"
