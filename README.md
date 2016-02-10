@@ -38,6 +38,7 @@ A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](https
 
 
 ## TODO
+- display all letters
 - move on focus
 - images
 - display properly the gallow

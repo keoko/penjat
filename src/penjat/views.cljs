@@ -1,13 +1,15 @@
 (ns penjat.views
   (:require [reagent.core  :as reagent :refer [atom]]
             [re-frame.core :refer [subscribe dispatch]]
-            [penjat.game :refer [win-game?]]))
+            [penjat.game :refer [win-game? contains-char?]]))
 
 
 
 (def img-dir "img")
 
 (def theme-name "julia")
+
+(def alphabet (map #(js/String.fromCharCode %) (range 65 91)))
 
 
 (defn choose-word-input [{:keys [title on-save on-stop]}]
@@ -46,6 +48,18 @@
   [:div (apply str (interpose ","  misses))])
 
 
+(defn alphabet-bar
+  [guesses misses]
+  [:div.todo
+   (map (fn [c] 
+          (cond 
+            (contains-char? guesses c) [:b  c]
+            (contains-char? misses c) [:del c]
+            :else [:a {:href "#"
+                       :on-click #(dispatch [:key c])} c]))  
+        alphabet)])
+
+
 (defn gallow
   []
   (let [a (subscribe [:num-misses])]
@@ -60,15 +74,6 @@
                  :style {:display (if (== @a i) "inline-block" "none")}}]))])))
 
 
-
-
-(defn replay
-  []
-  (fn replay-button
-    []
-    [:button {:on-click #(dispatch [:initialise-db])} "tornar a jugar"]))
-
-
 (defn start-page
   []
   (fn start-page-render
@@ -79,13 +84,14 @@
 
 (defn play-page
   []
-  (let [misses (subscribe [:misses])]
+  (let [guesses (subscribe [:guesses])
+        misses (subscribe [:misses])]
     (fn play-page-render
       []
       [:div 
        [guessed-letters]
-       [gallow]
-       [missed-letters @misses]])))
+       [alphabet-bar @guesses @misses]
+       [gallow]])))
 
 
 (defn end-page

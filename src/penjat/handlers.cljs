@@ -26,7 +26,7 @@
 
 (defn keydown-in-play-page
   [key]
-  (dispatch [:key key]))
+  (dispatch [:key (.charAt key 0)]))
 
 (defn keydown-in-end-page
   [key]
@@ -66,7 +66,6 @@
  :key       
  app-middleware
  (fn
-   [db [_ key]]
-   (let [letter (.charAt key 0)]
-     (when (not (clojure.string/blank? key))
-       (guess-letter db key)))))
+   [db [_ letter]]
+   (.log js/console (str ":key" letter))
+   (guess-letter db letter)))
