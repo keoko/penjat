@@ -74,7 +74,7 @@
   (fn start-page-render
     []
     [choose-word-input {:class "new-todo"
-                        :placeholder ""
+                        :placeholder "Escull una paraula"
                         :on-save #(dispatch [:set-word %])}]))
 
 (defn play-page
@@ -94,32 +94,15 @@
         guesses (subscribe [:guesses])]
       (fn end-page-render
         []
-        [:div 
-         [:div (if (win-game? @word @guesses)
+        (let [text (if (win-game? @word @guesses)
                  "HAS GUANYAT :D !!!!"
                  [:div "Has perdut :'(  --> La paraula era " [:b @word]])]
-         [replay]])))
-
-(defn start-footer
-  []
-  [:p "Escull una paraula"])
-
-(defn play-footer
-  []
-  [:p "Adivina la paraula"])
-
-(defn end-footer
-  []
-  [:p "Prem qualsevol tecla per tornar a jugar."])
+          [:div.new-todo text]))))
 
 
 (def body-by-page {:start start-page
                    :end end-page
                    :play play-page})
-
-(def footer-by-page {:start start-footer
-                     :end end-footer
-                     :play play-footer})
 
 
 (defn penjat-app
@@ -130,6 +113,4 @@
        [:section.todoapp
         [:header#header
          [:h1 "penjat"]]
-        [(get body-by-page @current-page)]]
-       [:footer.info
-        [(get footer-by-page @current-page)]]])))
+        [(get body-by-page @current-page)]]])))
