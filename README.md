@@ -38,17 +38,21 @@ A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](https
 
 
 ## TODO
-- clean re-frame example code
-- refactor code with domain language
-- handle key stroke
-- layout with bootstrap
+- images
+- center letters
+- increase footer letters
+- display properly the gallow
+- page control is not game logic
+- refactor page-based functions
+- deploy to heroku
 - check schema
 - re-frame middleware
-- with-meta, component-did-mount, reagent/dom-node
-- local storage
-- do we split the game logic into a game file?
+
+
+## DOUBTS
 - chained state reaction? one state property depending on another one? is this state?
-- deploy to heroku
+- with-meta, component-did-mount, reagent/dom-node
+
 
 
 ## NICE TO HAVE
