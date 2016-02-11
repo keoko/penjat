@@ -32,4 +32,6 @@
 
   :cljsbuild {:builds {:client {:source-paths ["src"]
                                 :compiler     {:output-dir "resources/public/js"
-                                               :output-to  "resources/public/js/client.js"}}}})
+                                               :output-to  "resources/public/js/client.js"}}}}
+  
+  :min-lein-version "2.0.0")
