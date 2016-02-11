@@ -38,11 +38,10 @@ A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](https
 
 
 ## TODO
-- display all letters
-- move on focus
 - images
-- display properly the gallow
 - greyed init gallow
+- display properly the gallow
+- display gallow in last page
 - page control is not game logic
 - deploy to heroku
 - check schema

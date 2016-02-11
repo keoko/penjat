@@ -1,7 +1,7 @@
 (ns penjat.views
   (:require [reagent.core  :as reagent :refer [atom]]
             [re-frame.core :refer [subscribe dispatch]]
-            [penjat.game :refer [win-game? contains-char?]]))
+            [penjat.game :refer [win-game? contains-char? max-misses]]))
 
 
 
@@ -11,6 +11,10 @@
 
 (def alphabet (map #(js/String.fromCharCode %) (range 65 91)))
 
+
+(def initial-focus-wrapper 
+  (with-meta identity
+    {:component-did-mount #(.focus (reagent/dom-node %))}))
 
 (defn choose-word-input [{:keys [title on-save on-stop]}]
   (let [val (atom title)
@@ -67,7 +71,7 @@
       []
       [:div
        (doall 
-        (for [i (range 1 11)]
+        (for [i (range 0 (+ max-misses 2))]
           [:img {:width "500px"
                  :height "500px"
                  :src (str img-dir "/" theme-name "/" i ".png")
@@ -78,9 +82,10 @@
   []
   (fn start-page-render
     []
-    [choose-word-input {:class "new-todo"
-                        :placeholder "Escull una paraula"
-                        :on-save #(dispatch [:set-word %])}]))
+    [initial-focus-wrapper
+     [choose-word-input {:class "new-todo"
+                         :placeholder "Escull una paraula"
+                         :on-save #(dispatch [:set-word %])}]]))
 
 (defn play-page
   []
@@ -103,7 +108,9 @@
         (let [text (if (win-game? @word @guesses)
                  "HAS GUANYAT :D !!!!"
                  [:div "Has perdut :'(  --> La paraula era " [:b @word]])]
-          [:div.new-todo text]))))
+          [:div
+           [:div.new-todo text]
+           [gallow]]))))
 
 
 (def body-by-page {:start start-page
