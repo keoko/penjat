@@ -1,7 +1,7 @@
 (ns penjat.handlers
   (:require
     [penjat.db    :refer [schema]]
-    [penjat.game  :refer [default-game-state set-word guess-letter get-current-page]]
+    [penjat.game  :refer [default-game-state set-word guess-letter end-game?]]
     [re-frame.core :refer [register-handler path trim-v after dispatch]]
     [schema.core   :as s]))
 
@@ -69,3 +69,12 @@
    [db [_ letter]]
    (.log js/console (str ":key" letter))
    (guess-letter db letter)))
+
+
+(defn get-current-page
+  [{:keys [word guesses misses]}]
+  (if (not (seq word))
+    :start
+    (if (end-game? word guesses misses)
+      :end 
+      :play)))

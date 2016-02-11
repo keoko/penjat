@@ -1,7 +1,7 @@
 (ns penjat.subs
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [re-frame.core :refer [register-sub]]
-            [penjat.game :refer [get-current-page]]))
+            [penjat.handlers :refer [get-current-page]]))
 
 
 (register-sub
