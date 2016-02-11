@@ -41,7 +41,6 @@ A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](https
 - images
 - greyed init gallow
 - display properly the gallow
-- display gallow in last page
 - deploy to heroku
 - check schema
 - re-frame middleware
