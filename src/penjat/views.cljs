@@ -73,7 +73,6 @@
        (doall 
         (for [i (range 0 (+ max-misses 2))]
           [:img {:width "500px"
-                 :height "500px"
                  :src (str img-dir "/" theme-name "/" i ".png")
                  :style {:display (if (== @a i) "inline-block" "none")}}]))])))
 
