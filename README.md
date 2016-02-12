@@ -38,9 +38,6 @@ A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](https
 
 
 ## TODO
-- images
-- greyed init gallow
-- display properly the gallow
 - deploy to heroku
 - check schema
 - re-frame middleware
@@ -55,4 +52,4 @@ A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](https
 ## NICE TO HAVE
 - warning message on repeated letter
 - control allowed letters
-- replace todos.css with bootstrap
+- add more themes (e.g. blackboard, ascii-art)

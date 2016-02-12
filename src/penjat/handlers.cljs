@@ -37,6 +37,15 @@
                             :play keydown-in-play-page
                             :end keydown-in-end-page})
 
+(defn get-current-page
+  [{:keys [word guesses misses]}]
+  (if (not (seq word))
+    :start
+    (if (end-game? word guesses misses)
+      :end 
+      :play)))
+
+
 (register-handler
  :keypressed
  (fn [db [_ e page]]
@@ -71,10 +80,3 @@
    (guess-letter db letter)))
 
 
-(defn get-current-page
-  [{:keys [word guesses misses]}]
-  (if (not (seq word))
-    :start
-    (if (end-game? word guesses misses)
-      :end 
-      :play)))
