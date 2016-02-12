@@ -26,7 +26,6 @@
     (fn [props]
       [:input (merge props
                      {:type "text"
-                      :style {:text-transform "uppercase"}
                       :value @val
                       :on-blur save
                       :on-change #(reset! val (-> % .-target .-value))
@@ -41,10 +40,10 @@
   (let [word (subscribe [:word])
         guesses (subscribe [:guesses])]
     (fn word-input-render
-      []
+      []      
       (let [letters (clojure.string/join " " 
                                          (map #(if (contains? @guesses %) % "_") @word))]
-        [:div.new-todo letters]))))
+        [:b {:style {:font-size "50px"}} letters]))))
 
 
 (defn missed-letters
@@ -54,13 +53,15 @@
 
 (defn alphabet-bar
   [guesses misses]
-  [:div.todo
+  [:p.lead
    (map (fn [c] 
-          (cond 
-            (contains-char? guesses c) [:b  c]
-            (contains-char? misses c) [:del c]
-            :else [:a {:href "#"
-                       :on-click #(dispatch [:key c])} c]))  
+          [:span 
+           {:style {:padding "5px"}}
+           (cond 
+             (contains-char? guesses c) [:b  c]
+             (contains-char? misses c) [:del {:style {:display "none"}} c]
+             :else [:a {:href "#"
+                        :on-click #(dispatch [:key c])} c])])  
         alphabet)])
 
 
@@ -81,10 +82,11 @@
   []
   (fn start-page-render
     []
-    [initial-focus-wrapper
-     [choose-word-input {:class "new-todo"
-                         :placeholder "Escull una paraula"
-                         :on-save #(dispatch [:set-word %])}]]))
+    [:div.input-group.input-group-lg.col-sm-offset-4.col-sm-4
+     [initial-focus-wrapper
+      [choose-word-input {:class "center-block form-control input-lg"
+                          :placeholder "Escriu una paraula"
+                          :on-save #(dispatch [:set-word %])}]]]))
 
 (defn play-page
   []
@@ -93,8 +95,8 @@
     (fn play-page-render
       []
       [:div 
-       [guessed-letters]
        [alphabet-bar @guesses @misses]
+       [guessed-letters]
        [gallow]])))
 
 
@@ -105,10 +107,10 @@
       (fn end-page-render
         []
         (let [text (if (win-game? @word @guesses)
-                 "HAS GUANYAT :D !!!!"
-                 [:div "Has perdut :'(  --> La paraula era " [:b @word]])]
+                     [:p.lead "HAS GUANYAT!!!!"]
+                     [:p.lead "Has perdut. La paraula era " [:b @word]])]
           [:div
-           [:div.new-todo text]
+           text
            [gallow]]))))
 
 
@@ -117,7 +119,7 @@
                    :play play-page})
 
 
-(defn penjat-app
+#_(defn penjat-app
   []
   (let [current-page (subscribe [:current-page])]
     (fn []
@@ -126,3 +128,15 @@
         [:header#header
          [:h1 "penjat"]]
         [(get body-by-page @current-page)]]])))
+
+
+(defn penjat-app
+  []
+  (let [current-page (subscribe [:current-page])]
+    (fn []
+      [:div.container-full
+       [:div.row
+        [:div.col-lg-12.text-center.v-center
+         [:h1 "penjat"]
+         [(get body-by-page @current-page)]]]
+       [:br] [:br] [:br] [:br] [:br]])))
