@@ -45,7 +45,7 @@
       []      
       (let [letters (clojure.string/join " " 
                                          (map #(if (contains? @guesses %) % "_") @word))]
-        [:b {:style {:font-size "50px"}} letters]))))
+        [:b.imp letters]))))
 
 
 (defn missed-letters
@@ -54,7 +54,7 @@
 
 
 (defn alphabet-bar
-  [guesses misses]
+  [guesses misses no-link]
   [:p.lead
    (map (fn [c] 
           [:span 
@@ -62,6 +62,7 @@
            (cond 
              (contains-char? guesses c) [:b  c]
              (contains-char? misses c) [:del {:style {:display "none"}} c]
+             no-link (str c)
              :else [:a {:href "#"
                         :on-click #(dispatch [:key c])} c])])  
         alphabet)])
@@ -90,7 +91,7 @@
   (fn start-page-render
     []
     [:div
-     [alphabet-bar #{} #{}]
+     [alphabet-bar #{} #{} true]
      [:div.input-group.input-group-lg.col-sm-offset-4.col-sm-4
       [initial-focus-wrapper
        [choose-word-input {:class "center-block form-control input-lg"
@@ -104,7 +105,7 @@
     (fn play-page-render
       []
       [:div 
-       [alphabet-bar @guesses @misses]
+       [alphabet-bar @guesses @misses false]
        [guessed-letters]
        [gallow]])))
 
@@ -117,13 +118,13 @@
       (fn end-page-render
         []
         [:div
-         [alphabet-bar @guesses @misses]
+         [alphabet-bar @guesses @misses true]
          (if (win-game? @word @guesses)
            [:div
-            [:p {:style {:font-size "50px"}} "HAS GUANYAT!!!!"]
+            [:p.imp "HAS GUANYAT!!!!"]
             (gallow-image win-img-name "inline-block")]
            [:div 
-            [:p {:style {:font-size "50px"}} "Has perdut. La paraula era " [:b @word]]
+            [:p.imp "Has perdut. La paraula era " [:b @word]]
             [gallow]])])))
 
 
