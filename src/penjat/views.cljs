@@ -11,6 +11,8 @@
 
 (def alphabet (map #(js/String.fromCharCode %) (range 65 91)))
 
+(def win-img-name "win")
+
 
 (def initial-focus-wrapper 
   (with-meta identity
@@ -65,6 +67,13 @@
         alphabet)])
 
 
+(defn gallow-image 
+  [name display]
+  [:img {:width "500px"
+         :src (str img-dir "/" theme-name "/" name ".png")
+         :style {:display display}}])
+
+
 (defn gallow
   []
   (let [a (subscribe [:num-misses])]
@@ -73,20 +82,20 @@
       [:div
        (doall 
         (for [i (range 0 (+ max-misses 2))]
-          [:img {:width "500px"
-                 :src (str img-dir "/" theme-name "/" i ".png")
-                 :style {:display (if (== @a i) "inline-block" "none")}}]))])))
+          (gallow-image i (if (== @a i) "inline-block" "none"))))])))
 
 
 (defn start-page
   []
   (fn start-page-render
     []
-    [:div.input-group.input-group-lg.col-sm-offset-4.col-sm-4
-     [initial-focus-wrapper
-      [choose-word-input {:class "center-block form-control input-lg"
-                          :placeholder "Escriu una paraula"
-                          :on-save #(dispatch [:set-word %])}]]]))
+    [:div
+     [alphabet-bar #{} #{}]
+     [:div.input-group.input-group-lg.col-sm-offset-4.col-sm-4
+      [initial-focus-wrapper
+       [choose-word-input {:class "center-block form-control input-lg"
+                           :placeholder "Escriu una paraula"
+                           :on-save #(dispatch [:set-word %])}]]]]))
 
 (defn play-page
   []
@@ -103,31 +112,24 @@
 (defn end-page
   []
   (let [word    (subscribe [:word])
-        guesses (subscribe [:guesses])]
+        guesses (subscribe [:guesses])
+        misses (subscribe [:misses])]
       (fn end-page-render
         []
-        (let [text (if (win-game? @word @guesses)
-                     [:p.lead "HAS GUANYAT!!!!"]
-                     [:p.lead "Has perdut. La paraula era " [:b @word]])]
-          [:div
-           text
-           [gallow]]))))
+        [:div
+         [alphabet-bar @guesses @misses]
+         (if (win-game? @word @guesses)
+           [:div
+            [:p {:style {:font-size "50px"}} "HAS GUANYAT!!!!"]
+            (gallow-image win-img-name "inline-block")]
+           [:div 
+            [:p {:style {:font-size "50px"}} "Has perdut. La paraula era " [:b @word]]
+            [gallow]])])))
 
 
 (def body-by-page {:start start-page
                    :end end-page
                    :play play-page})
-
-
-#_(defn penjat-app
-  []
-  (let [current-page (subscribe [:current-page])]
-    (fn []
-      [:div
-       [:section.todoapp
-        [:header#header
-         [:h1 "penjat"]]
-        [(get body-by-page @current-page)]]])))
 
 
 (defn penjat-app
@@ -138,5 +140,4 @@
        [:div.row
         [:div.col-lg-12.text-center.v-center
          [:h1 "penjat"]
-         [(get body-by-page @current-page)]]]
-       [:br] [:br] [:br] [:br] [:br]])))
+         [(get body-by-page @current-page)]]]])))
