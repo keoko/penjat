@@ -5,7 +5,7 @@ A [re-frame](https://github.com/Day8/re-frame) implementation of [hangman](https
 
 ## Setup And Run
 
-1. Install [Leiningen](http://leiningen.org/)  (plus Java).
+1. Install [Leiningen](http://leiningen.org/)  (plus Java). 
 
 2. Get the re-frame repo
    ```
