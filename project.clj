@@ -1,17 +1,30 @@
 (defproject penjat "0.1.0"
   :dependencies [[org.clojure/clojure       "1.7.0"]
                  [org.clojure/clojurescript "1.7.170"]
+                 [compojure "1.4.0"]
+                 [ring "1.4.0"]
+                 [ring/ring-defaults "0.1.4"]
                  [reagent "0.6.0-alpha"]
                  [re-frame "0.7.0-alpha"]
                  [secretary "1.2.3"]
-                 [prismatic/schema "1.0.3"]]
+                 [prismatic/schema "1.0.3"]
+                 [environ "1.0.0"]]
 
   :plugins [[lein-cljsbuild "1.1.1"]
             [lein-figwheel "0.5.0-2"]
-            [lein-heroku "0.5.3"]]
+            [lein-heroku "0.5.3"]
+            [lein-ring "0.9.1"]]
 
   
   :hooks [leiningen.cljsbuild]
+
+  :source-paths ["src/clj" "src/cljs"]
+
+  :ring {:handler penjat.handler/app
+         :uberwar-name "passa-paraula.war"}
+
+
+
 
   :profiles {:dev {:cljsbuild
                    {:builds {:client {:source-paths ["devsrc"]
@@ -24,20 +37,33 @@
              :prod {:cljsbuild
                     {:builds {:client {:compiler    {:optimizations :advanced
                                                      :elide-asserts true
-                                                     :pretty-print false}}}}}}
+                                                     :pretty-print false}}}}}
+
+             :uberjar {:env {:production true}
+                       :aot :all
+                       :omit-source true
+                       :cljsbuild {:jar true
+                                   :builds {:app
+                                             {:source-paths ["env/prod/cljs"]
+                                              :compiler
+                                              {:optimizations :advanced
+                                               :pretty-print false}}}}}
+
+}
 
   :figwheel {:server-port 3450
              :repl        true}
 
   :clean-targets ^{:protect false} ["resources/public/js" "target"]
 
-  :cljsbuild {:builds {:client {:source-paths ["src"]
+  :cljsbuild {:builds {:client {:source-paths ["src/cljs"]
                                 :compiler     {:output-dir "resources/public/js"
                                                :output-to  "resources/public/js/client.js"}}}}
 
   :min-lein-version "2.5.0"
   :heroku {:app-name "penjat"}
   :uberjar-name "penjat.jar"
+  :main penjat.server
   :aliases {"package"
             ["with-profile" "prod" "do"
              "clean" ["cljsbuild" "once"]]})
