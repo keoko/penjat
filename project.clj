@@ -1,4 +1,7 @@
 (defproject penjat "0.1.0"
+
+  :source-paths ["src/clj" "src/cljs"]
+
   :dependencies [[org.clojure/clojure       "1.7.0"]
                  [org.clojure/clojurescript "1.7.170"]
                  [compojure "1.4.0"]
@@ -12,17 +15,19 @@
 
   :plugins [[lein-cljsbuild "1.1.1"]
             [lein-figwheel "0.5.0-2"]
-            [lein-heroku "0.5.3"]
             [lein-ring "0.9.1"]
             [lein-asset-minifier "0.2.2"]]
 
+  :ring {:handler penjat.handler/app
+         :uberwar-name "penjar.war"}
+
+  :min-lein-version "2.5.0"
+
+  :uberjar-name "penjat.jar"
+
+  :main penjat.server
   
   :hooks [leiningen.cljsbuild]
-
-  :source-paths ["src/clj" "src/cljs"]
-
-  :ring {:handler penjat.handler/app
-         :uberwar-name "passa-paraula.war"}
 
   :minify-assets
   {:assets
@@ -38,7 +43,9 @@
                                                      :source-map-timestamp true}}}}}
 
              :prod {:cljsbuild
-                    {:builds {:client {:compiler    {:optimizations :advanced
+                    {:builds {:client {:compiler    {:main penjat.core
+                                                     :asset-path "js"
+                                                     :optimizations :advanced
                                                      :elide-asserts true
                                                      :pretty-print false}}}}}
 
@@ -62,12 +69,9 @@
 
   :cljsbuild {:builds {:client {:source-paths ["src/cljs"]
                                 :compiler     {:output-dir "resources/public/js"
-                                               :output-to  "resources/public/js/client.js"}}}}
+                                               :output-to  "resources/public/js/client.js"
+                                               :asset-path "js"}}}}
 
-  :min-lein-version "2.5.0"
-  :heroku {:app-name "penjat"}
-  :uberjar-name "penjat.jar"
-  :main penjat.server
   :aliases {"package"
             ["with-profile" "prod" "do"
              "clean" ["cljsbuild" "once"]]})
