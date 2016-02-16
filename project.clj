@@ -13,7 +13,8 @@
   :plugins [[lein-cljsbuild "1.1.1"]
             [lein-figwheel "0.5.0-2"]
             [lein-heroku "0.5.3"]
-            [lein-ring "0.9.1"]]
+            [lein-ring "0.9.1"]
+            [lein-asset-minifier "0.2.2"]]
 
   
   :hooks [leiningen.cljsbuild]
@@ -23,7 +24,9 @@
   :ring {:handler penjat.handler/app
          :uberwar-name "passa-paraula.war"}
 
-
+  :minify-assets
+  {:assets
+    {"resources/public/css/site.min.css" "resources/public/css/site.css"}}
 
 
   :profiles {:dev {:cljsbuild
@@ -39,7 +42,8 @@
                                                      :elide-asserts true
                                                      :pretty-print false}}}}}
 
-             :uberjar {:env {:production true}
+             :uberjar {:hooks [leiningen.cljsbuild minify-assets.plugin/hooks]
+                       :env {:production true}
                        :aot :all
                        :omit-source true
                        :cljsbuild {:jar true
