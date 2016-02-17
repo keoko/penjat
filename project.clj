@@ -1,6 +1,4 @@
-(defproject penjat "0.1.0"
-
-  :source-paths ["src/clj" "src/cljs"]
+(defproject penjat "0.1.0-SNAPSHOT"
 
   :dependencies [[org.clojure/clojure       "1.7.0"]
                  [org.clojure/clojurescript "1.7.170"]
@@ -13,65 +11,10 @@
                  [prismatic/schema "1.0.3"]
                  [environ "1.0.0"]]
 
-  :plugins [[lein-cljsbuild "1.1.1"]
-            [lein-figwheel "0.5.0-2"]
-            [lein-ring "0.9.1"]
-            [lein-asset-minifier "0.2.2"]]
+  :main ^:skip-aot penjat.server
 
-  :ring {:handler penjat.handler/app
-         :uberwar-name "penjar.war"}
+  ;;:clean-targets ^{:protect false} ["resources/public/js" "target"]
 
-  :min-lein-version "2.5.0"
+  :profiles {:uberjar {:aot :all}}
 
-  :uberjar-name "penjat.jar"
-
-  :main penjat.server
-  
-  :hooks [leiningen.cljsbuild]
-
-  :minify-assets
-  {:assets
-    {"resources/public/css/site.min.css" "resources/public/css/site.css"}}
-
-
-  :profiles {:dev {:cljsbuild
-                   {:builds {:client {:source-paths ["devsrc"]
-                                      :compiler     {:main penjat.dev
-                                                     :asset-path "js"
-                                                     :optimizations :none
-                                                     :source-map true
-                                                     :source-map-timestamp true}}}}}
-
-             :prod {:cljsbuild
-                    {:builds {:client {:compiler    {:main penjat.core
-                                                     :asset-path "js"
-                                                     :optimizations :advanced
-                                                     :elide-asserts true
-                                                     :pretty-print false}}}}}
-
-             :uberjar {:hooks [leiningen.cljsbuild minify-assets.plugin/hooks]
-                       :env {:production true}
-                       :aot :all
-                       :omit-source true
-                       :cljsbuild {:jar true
-                                   :builds {:app
-                                             {:source-paths ["env/prod/cljs"]
-                                              :compiler
-                                              {:optimizations :advanced
-                                               :pretty-print false}}}}}
-
-}
-
-  :figwheel {:server-port 3450
-             :repl        true}
-
-  :clean-targets ^{:protect false} ["resources/public/js" "target"]
-
-  :cljsbuild {:builds {:client {:source-paths ["src/cljs"]
-                                :compiler     {:output-dir "resources/public/js"
-                                               :output-to  "resources/public/js/client.js"
-                                               :asset-path "js"}}}}
-
-  :aliases {"package"
-            ["with-profile" "prod" "do"
-             "clean" ["cljsbuild" "once"]]})
+  :source-paths ["src/clj"])
