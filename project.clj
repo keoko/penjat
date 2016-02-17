@@ -15,8 +15,27 @@
 
   :clean-targets ^{:protect false} ["resources/public/js" "target"]
 
+  :plugins [[lein-cljsbuild "1.1.2"]]
+
   :profiles {:uberjar {:main penjat.server
-                       :aot :all}} 
+                       :env {:production true}
+                       :aot :all
+                       :omit-source true
+                       :prep-tasks ["compile" ["cljsbuild" "once"]]
+                       :cljsbuild {:jar true
+                                   :builds {:client
+                                            {:compiler
+                                             {:main penjat.core
+                                              :optimizations :advanced
+                                              :pretty-print false}}}}}} 
+
+  :cljsbuild {:builds 
+              {:client 
+               {:source-paths ["src/cljs"]
+                :compiler {:output-dir "resources/public/js"
+                           :output-to  "resources/public/js/client.js"
+                           :asset-path "js"}}}}
+  
 
   :source-paths ["src/clj"]
 
