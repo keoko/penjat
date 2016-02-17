@@ -13,8 +13,13 @@
 
   :main ^:skip-aot penjat.server
 
-  ;;:clean-targets ^{:protect false} ["resources/public/js" "target"]
+  :clean-targets ^{:protect false} ["resources/public/js" "target"]
 
-  :profiles {:uberjar {:aot :all}}
+  :profiles {:uberjar {:main penjat.server
+                       :aot :all}}
 
-  :source-paths ["src/clj"])
+  :source-paths ["src/clj"]
+
+  :uberjar-name "penjat.jar"
+
+  :min-lein-version "2.0.0")
