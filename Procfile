@@ -1,0 +1,1 @@
+web: java -cp target/target.jar clojure.main -m penjar.server
