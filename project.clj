@@ -15,9 +15,21 @@
 
   :clean-targets ^{:protect false} ["resources/public/js" "target"]
 
-  :plugins [[lein-cljsbuild "1.1.2"]]
+  :plugins [[lein-cljsbuild "1.1.2"]
+            [lein-figwheel "0.5.0-2"]
+            [lein-ring "0.9.1"]]
 
-  :profiles {:uberjar {:main penjat.server
+  :profiles {
+             :dev {:cljsbuild
+                   {:builds {:client {:source-paths ["devsrc"]
+                                      :compiler     {:main penjat.dev
+                                                     :asset-path "js"
+                                                     :optimizations :none
+                                                     :source-map true
+                                                     :source-map-timestamp true}}}}}
+
+
+:uberjar {:main penjat.server
                        :env {:production true}
                        :aot :all
                        :omit-source true
@@ -35,7 +47,12 @@
                 :compiler {:output-dir "resources/public/js"
                            :output-to  "resources/public/js/client.js"
                            :asset-path "js"}}}}
-  
+
+  :figwheel {:server-port 3450
+             :repl        true}
+
+  :ring {:handler penjat.handler/app
+         :uberwar-name "penjar.war"}
 
   :source-paths ["src/clj"]
 
