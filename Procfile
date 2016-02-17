@@ -1,1 +1,1 @@
-web: java -cp target/target.jar clojure.main -m penjar.server
+web: java -cp target/penjat.jar clojure.main -m penjat.server
