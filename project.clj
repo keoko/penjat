@@ -16,7 +16,7 @@
   :clean-targets ^{:protect false} ["resources/public/js" "target"]
 
   :profiles {:uberjar {:main penjat.server
-                       :aot :all}}
+                       :aot :all}} 
 
   :source-paths ["src/clj"]
 
